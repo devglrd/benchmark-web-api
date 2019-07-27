@@ -14,23 +14,22 @@ class Controller extends AbstractController
     public function index()
     {
         return $this->json([
-            "status"  => 200,
-            "message" => "Hello World"
+            'status'  => 200,
+            'message' => 'Hello World'
         ]);
     }
-    
+
     /**
      * @Route("/api/users", name="users")
      */
     public function getUsers()
     {
-    
         $users = $this->getDoctrine()
             ->getRepository(User::class)
-            ->findAll();
-        
+            ->findAllOptimized();
+
         return $this->json([
-            "data" => $users
+            'data' => $users
         ]);
     }
 }
