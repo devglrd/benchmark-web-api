@@ -2,7 +2,7 @@ version: '3.5'
 services:
 
   laravel:
-    image: xuxk2ofg.gra5.container-registry.ovh.net/bench/laravel:1.0.1
+    image: xuxk2ofg.gra5.container-registry.ovh.net/bench/laravel:1.0.2
     container_name: laravel
     ports:
       - 9991:80
@@ -16,7 +16,7 @@ services:
       - DB_USERNAME=root
 
   symfony:
-    image: xuxk2ofg.gra5.container-registry.ovh.net/bench/symfony:1.0.1
+    image: xuxk2ofg.gra5.container-registry.ovh.net/bench/symfony:1.0.2
     container_name: symfony
     ports:
       - 9992:80
@@ -26,9 +26,10 @@ services:
       - laravel
     environment:
       - DATABASE_URL=mysql://root:root@mysql-bench:3306/bench
+      - APP_ENV=prod
 
   node-api:
-    image: xuxk2ofg.gra5.container-registry.ovh.net/bench/node-api:1.0.1
+    image: xuxk2ofg.gra5.container-registry.ovh.net/bench/node-api:1.0.2
     container_name: node-api
     command: bash -c 'pm2-runtime build/index.js'
     links:
