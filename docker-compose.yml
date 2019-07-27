@@ -1,0 +1,56 @@
+version: '3.5'
+services:
+
+  laravel:
+    image: xuxk2ofg.gra5.container-registry.ovh.net/bench/laravel:1.0.1
+    container_name: laravel
+    ports:
+      - 9991:80
+    command: bash -c 'php artisan migrate && php artisan key:generate && php artisan db:seed && nginx && php-fpm --allow-to-run-as-root'
+    links:
+      - mysql-bench
+    environment:
+      - DB_PASSWORD=root
+      - DB_HOST=mysql-bench
+      - DB_DATABASE=bench
+      - DB_USERNAME=root
+
+  symfony:
+    image: xuxk2ofg.gra5.container-registry.ovh.net/bench/symfony:1.0.1
+    container_name: symfony
+    ports:
+      - 9992:80
+    command: bash -c 'nginx && php-fpm --allow-to-run-as-root'
+    links:
+      - mysql-bench
+      - laravel
+    environment:
+      - DATABASE_URL=mysql://root:root@mysql-bench:3306/bench
+
+  node-api:
+    image: xuxk2ofg.gra5.container-registry.ovh.net/bench/node-api:1.0.1
+    container_name: node-api
+    command: bash -c 'pm2-runtime build/index.js'
+    links:
+      - mysql-bench
+      - laravel
+    environment:
+      - APP_PORT=3000
+      - ORMCONFIG_NAME=default
+      - DB_TYPE=mysql
+      - DB_HOST=mysql-bench
+      - DB_PORT=3306
+      - DB_USERNANE=root
+      - DB_PASSWORD=root
+      - DB_NAME=bench
+    ports:
+      - 9993:3000
+
+  mysql-bench:
+    image: "mysql:5.7"
+    container_name: mysql-bench
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=bench
+    ports:
+      - 3312:3306

@@ -1,0 +1,25 @@
+version: '3.5'
+services:
+  laravel:
+    image: bench/laravel:latest
+    ports:
+      - 8003:80
+    command: bash -c 'php artisan migrate && php artisan key:generate && nginx && php-fpm --allow-to-run-as-root'
+    links:
+      - mysql
+    environment:
+      - DB_PASSWORD=root
+      - DB_HOST=mysql
+      - DB_DATABASE=bench
+      - DB_USERNAME=root
+
+  mysql:
+    image: "mysql:5.7"
+    container_name: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=bench
+    #  - MYSQL_USER=
+    #      - MYSQL_PASSWORD=1ng13s83u
+    #   volumes:
+    #    - ./data/:/var/lib/mysql

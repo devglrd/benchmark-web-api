@@ -1,0 +1,25 @@
+version: '3.5'
+services:
+  symfony:
+    image: bench/symfony:latest
+    container_name: symfony
+    ports:
+      - 8003:80
+    command: bash -c 'nginx && php-fpm --allow-to-run-as-root'
+    links:
+      - mysql-2
+    environment:
+      - DATABASE_URL=mysql://root:root@mysql-2:3306/bench
+
+  mysql-2:
+    image: "mysql:5.7"
+    container_name: mysql-2
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=bench
+    #  - MYSQL_USER=
+    #      - MYSQL_PASSWORD=1ng13s83u
+    #   volumes:
+    #    - ./data/:/var/lib/mysql
+    ports:
+      - 3308:3306
