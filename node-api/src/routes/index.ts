@@ -10,7 +10,9 @@ routes.use("/api/auth", auth);
 routes.use("/api/user", user);
 
 routes.get("/api/users", UserController.listAll);
-routes.get("/api/users/map", UserController.listAllWithMap);
+routes.get("/api/users/cache", UserController.indexWithCache);
+
+routes.get("/api/users/mysql", UserController.indexWithSql);
 
 
 routes.use("/api", (req: Request, res: Response) => {

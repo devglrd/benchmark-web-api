@@ -1,7 +1,6 @@
 import {Request, Response} from "express";
-import {getRepository} from "typeorm";
+import {getConnection, getRepository} from "typeorm";
 import {validate} from "class-validator";
-
 import {User} from "../entity/User";
 import UserRessource from "../ressource/UserRessource";
 
@@ -9,12 +8,23 @@ class UserController {
 
     static listAll = async (req: Request, res: Response) => {
         //Get users from database
-        const userRepository = getRepository(User);
-        const users = await userRepository.find();
+        const users = await getRepository(User).createQueryBuilder("user").getMany();
 
         //Send the users object
         res.send({data: UserRessource.collection(users)});
     };
+
+    static indexWithCache = async (req: Request, res: Response) => {
+        const users = await getRepository(User).createQueryBuilder('user').cache(6000).getMany();
+        res.send({data: UserRessource.collection(users)});
+    }
+
+    static indexWithSql = async (req: Request, res: Response) => {
+        console.log('Req');
+        const users = await getConnection().query('SELECT * FROM users');
+        res.send({data: users});
+    }
+
 
     static listAllWithMap = async (req: Request, res: Response) => {
         //Get users from database

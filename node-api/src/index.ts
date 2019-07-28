@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import {createConnection} from 'typeorm';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
+import * as  compression from 'compression';
 import helmet = require('helmet');
 import routes from './routes';
 import * as cors from 'cors';
@@ -16,6 +17,7 @@ createConnection(config).then(async connection => {
     const app = express();
     app.use(cors());
     app.use(helmet());
+    app.use(compression());
     app.use(bodyParser.json());
     app.use('/', routes);
 

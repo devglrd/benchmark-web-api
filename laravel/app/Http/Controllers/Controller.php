@@ -23,6 +23,7 @@ class Controller extends BaseController
     public function getUsers()
     {
         $users = User::all();
+    
         return response()->json([
             "data" => $users
         ]);

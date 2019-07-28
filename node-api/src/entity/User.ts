@@ -4,14 +4,15 @@ import {
     Column,
     Unique,
     CreateDateColumn,
-    UpdateDateColumn
+    UpdateDateColumn,
+    BaseEntity
 } from "typeorm";
 import {Length, IsNotEmpty} from "class-validator";
 import * as bcrypt from "bcryptjs";
 
 @Entity({name: "users"})
 @Unique(["email"])
-export class User {
+export class User extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 

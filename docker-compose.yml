@@ -29,9 +29,9 @@ services:
       - APP_ENV=prod
 
   node-api:
-    image: xuxk2ofg.gra5.container-registry.ovh.net/bench/node-api:1.0.2
+    image: bench/node-api:1.0.4
     container_name: node-api
-    command: bash -c 'pm2-runtime build/index.js'
+    command: bash -c 'pm2-runtime ecosystem.config.js -i max'
     links:
       - mysql-bench
       - laravel
@@ -41,6 +41,7 @@ services:
       - DB_TYPE=mysql
       - DB_HOST=mysql-bench
       - DB_PORT=3306
+      - NODE_ENV=production
       - DB_USERNANE=root
       - DB_PASSWORD=root
       - DB_NAME=bench
